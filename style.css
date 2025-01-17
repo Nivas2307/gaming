@@ -1,0 +1,313 @@
+/* Ensure existing styles are not altered */
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "Itim", cursive;
+  }
+  
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .background {
+    background-color: #121212;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .title {
+    color: white;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 10%;
+  }
+  
+  .display {
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  
+  .hide {
+    display: none;
+  }
+  
+  .container {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 33% 33% 33%;
+    max-width: 300px;
+  }
+  
+  .tile {
+    border: 1px solid white;
+    min-width: 100px;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    cursor: pointer;
+    opacity: 0;
+    animation: tileReveal 1s forwards;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .tile:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+  }
+  
+  .controls button {
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    font-size: 20px;
+    margin-left: 1em;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .controls button:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .announcer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25%;
+    transform: translateX(-50%);
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    border-radius: 10px;
+    opacity: 0;
+    animation: fadeInOut 2s forwards;
+  }
+  
+  .new-match-message {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #ffcc00;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 8px;
+    opacity: 0; 
+    animation: bounceLeftRight 1s infinite ease-in-out, fadeIn 1s forwards;
+  }
+  
+  .loading-message {
+    position: absolute;
+    top: 73%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 8px;
+    animation: bounce 0.5s infinite;
+  }
+  
+  .announcer.green {
+    background-color: #6ab04c;
+  }
+  
+  .announcer.red {
+    background-color: #bb2cd9;
+  }
+  
+  .announcer.blue {
+    background-color: #0a79df;
+  }
+  
+  .restart {
+    background-color: #498afb;
+  }
+  
+  #reset {
+    background-color: #ff3860;
+  }
+  
+  .playerX {
+    color: #09c372;
+  }
+  
+  .playerO {
+    color: #498afb;
+  }
+  
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes tileReveal {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes bounce {
+    0% {
+      transform: translate(-50%, -50%) translateX(0);
+    }
+    50% {
+      transform: translate(-50%, -50%) translateX(-10px);
+    }
+    100% {
+      transform: translate(-50%, -50%) translateX(0);
+    }
+  }
+  
+  @keyframes bounceLeftRight {
+    0% {
+      transform: translate(-50%, -50%) translateX(0);
+    }
+    50% {
+      transform: translate(-50%, -50%) translateX(-10px); /* Move left */
+    }
+    100% {
+      transform: translate(-50%, -50%) translateX(0); /* Return to original position */
+    }
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: repeat(3, 1fr); /* Maintain a 3x3 grid */
+      grid-template-rows: repeat(3, 1fr);
+      width: 90vw; /* Fit within 90% of the viewport width */
+      height: 90vw; /* Keep the container square */
+      max-width: 400px; /* Limit the maximum size */
+      max-height: 400px;
+      margin: 0 auto; /* Center the container */
+    }
+  
+    .tile {
+      font-size: 30px; /* Adjust tile font size */
+      min-width: auto; /* Allow flexible sizing */
+      min-height: auto;
+      width: 100%; /* Fit within the grid cell */
+      height: 100%;
+    }
+  
+    .title {
+      font-size: 30px;
+      margin-top: 5%; /* Adjust margin for better spacing */
+    }
+  
+    .display {
+      font-size: 20px;
+    }
+  
+    .controls button {
+      font-size: 16px;
+      padding: 6px;
+    }
+  
+    .new-match-message {
+      font-size: 20px;
+    }
+  
+    .loading-message {
+      font-size: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      grid-template-columns: repeat(3, 1fr); /* Maintain a 3x3 grid */
+      grid-template-rows: repeat(3, 1fr);
+      width: 95vw; /* Fit within 95% of the viewport width */
+      height: 95vw; /* Keep the container square */
+      max-width: 300px; /* Limit the maximum size */
+      max-height: 300px;
+      margin: 0 auto; /* Center the container */
+    }
+  
+    .tile {
+      font-size: 25px; /* Smaller font size for smaller screens */
+      min-width: auto;
+      min-height: auto;
+      width: 100%; /* Fit within the grid cell */
+      height: 100%;
+    }
+  
+    .title {
+      font-size: 24px;
+      margin-top: 10%; /* Adjust margin for better spacing */
+    }
+  
+    .display {
+      font-size: 18px;
+    }
+  
+    .controls button {
+        width: 50vw;
+      font-size: 14px;
+      padding: 5px;
+    }
+  
+    .new-match-message {
+      font-size: 18px;
+      width: 50vw;
+    }
+  
+    .loading-message {
+      font-size: 14px;
+      width: 50vw;
+    }
+     
+  .announcer{
+    width: 50vw;
+    font-size: 18px;
+    padding: 20px;
+  }
+  }
+  
