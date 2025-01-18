@@ -30,11 +30,11 @@ window.addEventListener('DOMContentLoaded', () => {
     if (currentTheme === 'dark') {
         body.classList.add('dark-mode');
         body.classList.remove('light-mode');
-        themeButton.textContent = "🌙"; // Dark Mode Icon
+        themeButton.textContent = "🌙"; 
     } else {
         body.classList.add('light-mode');
         body.classList.remove('dark-mode');
-        themeButton.textContent = "🌞"; // Light Mode Icon
+        themeButton.textContent = "🌞"; 
     }
 
     // Set dynamic colors for X and O based on the current theme
@@ -43,6 +43,15 @@ window.addEventListener('DOMContentLoaded', () => {
             return player === 'X' ? '#FF3031' : '#F3B63A';
         } else {
             return player === 'X' ? '#43BE31' : '#1287A5';
+        }
+    };
+
+    // Set dynamic announcer color for X and O based on the current theme
+    const getAnnouncerColor = (player) => {
+        if (body.classList.contains('dark-mode')) {
+            return player === 'X' ? '#FF3031' : '#F3B63A'; 
+        } else {
+            return player === 'X' ? '#43BE31' : '#1287A5'; 
         }
     };
 
@@ -90,10 +99,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const announce = (type) => {
         switch (type) {
             case PLAYERX_WON:
-                announcer.innerText = '🏆🎖️Player X Wins!🎖️🏆';
+                announcer.innerHTML = `🏆🎖️Player <span style="color:${getAnnouncerColor('X')}">X</span> Wins!🎖️🏆`;
                 break;
             case PLAYERO_WON:
-                announcer.innerText = '🏆🎖️Player O Wins!🎖️🏆';
+                announcer.innerHTML = `🏆🎖️Player <span style="color:${getAnnouncerColor('O')}">O</span> Wins!🎖️🏆`;
                 break;
             case TIE:
                 announcer.innerText = "🤝it's Tie!";
