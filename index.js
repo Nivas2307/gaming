@@ -1,12 +1,10 @@
 window.addEventListener('DOMContentLoaded', () => {
+    const themeButton = document.getElementById('theme-button');
+    const body = document.body;
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');
     const announcer = document.querySelector('.announcer');
-    const container = document.querySelector('.container');
-    const loadingMessage = document.createElement('div');
-    loadingMessage.classList.add('loading-message');
-    loadingMessage.innerText = 'Loading...';
 
     let board = ['', '', '', '', '', '', '', '', ''];
     let currentPlayer = 'X';
@@ -27,6 +25,45 @@ window.addEventListener('DOMContentLoaded', () => {
         [2, 4, 6]
     ];
 
+    // Set default theme to 'light' if there's no saved theme
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
+        themeButton.textContent = "🌙"; // Dark Mode Icon
+    } else {
+        body.classList.add('light-mode');
+        body.classList.remove('dark-mode');
+        themeButton.textContent = "🌞"; // Light Mode Icon
+    }
+
+    // Set dynamic colors for X and O based on the current theme
+    const getCurrentPlayerColor = (player) => {
+        if (body.classList.contains('dark-mode')) {
+            return player === 'X' ? '#FF3031' : '#F3B63A';
+        } else {
+            return player === 'X' ? '#43BE31' : '#1287A5';
+        }
+    };
+
+    // Toggle theme when the button is clicked
+    themeButton.addEventListener('click', () => {
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            localStorage.setItem('theme', 'light');
+            themeButton.textContent = "🌞";
+        } else {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            themeButton.textContent = "🌙";
+        }
+
+        // Update the color of the current player dynamically after theme switch
+        playerDisplay.style.color = getCurrentPlayerColor(currentPlayer);
+    });
+
     const handleResultValidation = () => {
         let roundWon = false;
         for (let i = 0; i < winningConditions.length; i++) {
@@ -40,98 +77,62 @@ window.addEventListener('DOMContentLoaded', () => {
         if (roundWon) {
             announce(currentPlayer === 'X' ? PLAYERX_WON : PLAYERO_WON);
             isGameActive = false;
+            setTimeout(handleReset, 2000);
             return;
         }
 
-        if (!board.includes('')) announce(TIE);
+        if (!board.includes('')) {
+            announce(TIE);
+            setTimeout(handleReset, 2000);
+        }
     };
 
     const announce = (type) => {
         switch (type) {
             case PLAYERX_WON:
-                announcer.innerHTML = '🎉 Player <span class="playerX celebration">X</span> Won!';
-                announcer.classList.add('green');
+                announcer.innerText = '🏆🎖️Player X Wins!🎖️🏆';
                 break;
             case PLAYERO_WON:
-                announcer.innerHTML = '🎉 Player <span class="playerO celebration">O</span> Won!';
-                announcer.classList.add('red');
+                announcer.innerText = '🏆🎖️Player O Wins!🎖️🏆';
                 break;
             case TIE:
-                announcer.innerHTML = '🤝 It\'s a Tie!';
-                announcer.classList.add('blue');
+                announcer.innerText = "🤝it's Tie!";
                 break;
         }
         announcer.classList.remove('hide');
-        setTimeout(() => {
-            displayLoadingMessage(); 
-        }, 2000); 
     };
 
-    const displayLoadingMessage = () => {
-        document.body.appendChild(loadingMessage);
-        setTimeout(() => {
-            loadingMessage.remove(); 
-            showNewMatchMessage(); 
-        }, 1000); 
-    };
+    const handleTileClick = (index) => {
+        if (board[index] || !isGameActive) return;
 
-    const showNewMatchMessage = () => {
-        const newMatchMessage = document.createElement('div');
-        newMatchMessage.classList.add('new-match-message');
-        newMatchMessage.innerText = 'Starting a new match...';
-        document.body.appendChild(newMatchMessage);
-
-        setTimeout(() => {
-            newMatchMessage.remove(); 
-            resetBoard(); 
-        }, 2000); 
-    };
-
-    const isValidAction = (tile) => {
-        return tile.innerText === '';
-    };
-
-    const updateBoard = (index) => {
         board[index] = currentPlayer;
-    };
+        tiles[index].textContent = currentPlayer;
+        tiles[index].classList.add(`player${currentPlayer}`);
 
-    const changePlayer = () => {
-        playerDisplay.classList.remove(`player${currentPlayer}`);
+        handleResultValidation();
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        playerDisplay.innerText = currentPlayer;
-        playerDisplay.classList.add(`player${currentPlayer}`);
+
+        // Update the player display with the correct player and color
+        playerDisplay.textContent = `${currentPlayer}`;
+        playerDisplay.style.color = getCurrentPlayerColor(currentPlayer);
     };
 
-    const userAction = (tile, index) => {
-        if (isValidAction(tile) && isGameActive) {
-            tile.innerText = currentPlayer;
-            tile.classList.add(`player${currentPlayer}`);
-            updateBoard(index);
-            handleResultValidation();
-            if (isGameActive) changePlayer();
-        }
-    };
-
-    const resetBoard = () => {
+    const handleReset = () => {
         board = ['', '', '', '', '', '', '', '', ''];
         isGameActive = true;
         announcer.classList.add('hide');
-        announcer.classList.remove('green', 'red', 'blue');
-
         tiles.forEach(tile => {
-            tile.innerText = '';
-            tile.className = 'tile';
+            tile.textContent = '';
+            tile.classList.remove('playerX', 'playerO');
         });
-
-        if (currentPlayer === 'O') changePlayer();
+        currentPlayer = 'X';
+        playerDisplay.textContent = ` X`;
+        playerDisplay.style.color = getCurrentPlayerColor(currentPlayer);
     };
 
     tiles.forEach((tile, index) => {
-        tile.addEventListener('click', () => userAction(tile, index));
+        tile.addEventListener('click', () => handleTileClick(index));
     });
 
-    resetButton.addEventListener('click', () => {
-      
-        displayLoadingMessage();
-    });
+    resetButton.addEventListener('click', handleReset);
 });

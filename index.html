@@ -9,14 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="background"> <!-- Updated: Added a wrapper for background -->
+<body class="dark-mode">
+    <div class="background">
+        <header class="theme-toggle">
+            <button id="theme-button" class="theme-icon">🌙</button>
+
+        </header>
         <main>
             <section class="title">
-                <h1>Tic Tac Toe</h1>
+                <h1>Nivi Tic Tac</h1>
             </section>
             <section class="display">
-                Player <span class="display-player playerX">X </span>'s turn
+                Player <span class="display-player playerX"> X </span> 's turn
             </section>
             <section class="container">
                 <div class="tile"></div>
@@ -31,10 +35,10 @@
             </section>
             <section class="display announcer hide"></section>
             <section class="controls">
-                <button id="reset">Re Match</button>
+                <button id="reset">Re Start</button>
             </section>
         </main>
-    </div> <!-- End of background wrapper -->
+    </div>
     <script src="index.js"></script>
 </body>
 </html>
